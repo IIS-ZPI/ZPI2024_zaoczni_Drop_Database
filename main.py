@@ -7,7 +7,7 @@ class IArithmeticAdd:
 class IArithmeticsDiff:
   def diff(self, a: float , b: float) -> float:
     pass  
-
+#multiply
 class IArithmeticMult:
 	def Multiplication(self, a: float, b: float) -> float:
 		pass
