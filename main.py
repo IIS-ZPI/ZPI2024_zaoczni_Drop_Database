@@ -15,3 +15,4 @@ class IArithmeticMult:
 class IArithmeticsDiv:
    def Division(self, a: float, b: float) -> float:
     pass
+#operacje arytmetyczne
