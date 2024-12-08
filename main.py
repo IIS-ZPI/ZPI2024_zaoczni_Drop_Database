@@ -15,3 +15,5 @@ class IArithmeticMult:
 class IArithmeticsDiv:
    def Division(self, a: float, b: float) -> float:
     pass
+
+#Electronc - nisko oceniam pracem, nie ma nic wiecej niz deklaracje
