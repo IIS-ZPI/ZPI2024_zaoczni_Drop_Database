@@ -1,10 +1,12 @@
 import typing as t
 from datetime import date
+import requests
 
 from data_types import *
 
 
 class nbp_repository(object):
+	one_day_api_url = "https://api.nbp.pl/api/exchangerates/tables/A/{startDate}/{endDate}/?format=json"
 
 	@t.overload
 	@staticmethod
@@ -19,14 +21,14 @@ class nbp_repository(object):
 		usually smaller that requested.
 
 		:param start_date: Start date of exchange rates.
-		       
+			   
 			   Must be 2002-01-02 or later (not after ``end_date``).
 
 		:param end_date: End date of exchange rates.
-		       Must be before today (not before ``start_date``).
+			   Must be before today (not before ``start_date``).
 
 		:param currency: Code of retrieved currency.
-		       Allowed values are:
+			   Allowed values are:
 
 			   - USD,
 			   - EUR,
@@ -35,10 +37,12 @@ class nbp_repository(object):
 
 		:returns: t.Dict[date, float] | str
 		:return: Exchange rates, in format of dictionary { date: float },
-		         containing rates for days between specified dates, or string
+				 containing rates for days between specified dates, or string
 				 with error message.
 		'''
 		pass
+
+      
 
 
 	@t.overload
@@ -55,14 +59,14 @@ class nbp_repository(object):
 		usually smaller that requested.
 
 		:param start_date: Start date of exchange rates.
-		       
+			   
 			   Must be 2002-01-02 or later (not after ``end_date``).
 
 		:param end_date: End date of exchange rates.
-		       Must be before today (not before ``start_date``).
+			   Must be before today (not before ``start_date``).
 
 		:param currency: Code of retrieved currency.
-		       Allowed values are:
+			   Allowed values are:
 
 			   - USD,
 			   - EUR,
@@ -70,11 +74,11 @@ class nbp_repository(object):
 			   - NOK.
 
 		:param base_currency: Code of base currency.
-		       Must not be same as ``currency``.
+			   Must not be same as ``currency``.
 
 		:returns: t.Dict[date, float] | str
 		:return: Exchange rates, in format of dictionary { date: float },
-		         containing rates for days between specified dates, or string
+				 containing rates for days between specified dates, or string
 				 with error message.
 		'''
 		pass
@@ -85,9 +89,48 @@ class nbp_repository(object):
 		end_date: date,
 		currency: currency_code,
 		base_currency: t.Optional[currency_code] = None,
-	) -> exchange_rates | str:	
-		raise RuntimeError("Not implemented")
+	) -> exchange_rates | str:    
+		today = date.today()
+		if start_date > today:
+			return "Start date must be before today"
+		if start_date > end_date:
+			return "Start date must be before end date"
+		if start_date < date(2002, 1, 2):
+			return "Start date must be after 2002-01-01"
+		if end_date > today:
+			return "End date must be before today"
+		if end_date < start_date:
+			return "End date must be after start date"
+		if base_currency is not None and base_currency == currency:
+			return "Base currency must be different than currency"
+
+		response = requests.get(nbp_repository.one_day_api_url.format(startDate=start_date, endDate=end_date))
+		if response.status_code != 200:
+			return "Error while fetching data from NBP API"
+
+		# extract currencies data from response with dates
+		
+
+		data = response.json()
+		if base_currency is None:
+					rates = {}
+					for entry in data: 
+						edate = entry["effectiveDate"] 
+						for rate in entry["rates"]: 
+							if rate["code"] == currency:
+								rates[edate] = rate["mid"]
+					return rates
+		else:
+			rates = {}
+			for entry in data: 
+				edate = entry["effectiveDate"] 
+				if edate not in rates:
+					rates[edate] = []
+				for rate in entry["rates"]: 
+					if rate["code"] == currency or rate["code"] == base_currency:
+						rates[edate].append({"rate": rate["mid"], "currency": rate["code"]})
+			return rates
+		return data
 
 # Example usage
 # nbp_repository.get_exchange_rates(date(2024, 1, 1), date(2025, 1, 1), "USD")
-
