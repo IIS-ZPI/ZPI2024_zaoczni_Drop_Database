@@ -1,8 +1,6 @@
 import typing as t
 from datetime import date, timedelta
 import requests
-import pandas as pd
-
 from data_types import currency_code, exchange_rates
 
 
