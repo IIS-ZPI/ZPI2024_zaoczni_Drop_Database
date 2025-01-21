@@ -1,7 +1,6 @@
 import typing as t
-from datetime import date
+from datetime import date, timedelta
 import requests
-
 from data_types import currency_code, exchange_rates
 
 
@@ -100,6 +99,21 @@ class nbp_repository(object):
             return "End date must be after start date"
         if base_currency is not None and base_currency == currency:
             return "Base currency must be different than currency"
+        # if time between dates is greated than 93 days, split dates into smaller 93 days ranges
+        if (end_date - start_date).days > 93:
+            rates = {}
+            current_date = start_date
+            while current_date < end_date:
+                next_date = current_date + timedelta(days=93)
+                if next_date > end_date:
+                    next_date = end_date
+                rates.update(
+                    nbp_repository.get_exchange_rates(
+                        current_date, next_date, currency, base_currency
+                    )
+                )
+                current_date = next_date
+            return rates
 
         response = requests.get(
             nbp_repository.one_day_api_url.format(
@@ -132,7 +146,6 @@ class nbp_repository(object):
                             {"rate": rate["mid"], "currency": rate["code"]}
                         )
             return rates
-        return data
 
 
 # Example usage
