@@ -1,3 +1,4 @@
+import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -112,39 +113,45 @@ class Ui_MainWindow(object):
         self.radioButton_EUR.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.radioButton_EUR.setObjectName("radioButton_EUR")
         self.gridLayout_3.addWidget(self.radioButton_EUR, 1, 3, 1, 1, QtCore.Qt.AlignHCenter)
+        
         self.label_EUR_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_EUR_icon.setMaximumSize(QtCore.QSize(100, 100))
         self.label_EUR_icon.setText("")
-        self.label_EUR_icon.setPixmap(QtGui.QPixmap("./ICONS/EUR.png"))
+        self.label_EUR_icon.setPixmap(QtGui.QPixmap("src/UI/EUR.jpg"))
         self.label_EUR_icon.setScaledContents(True)
         self.label_EUR_icon.setObjectName("label_EUR_icon")
         self.gridLayout_3.addWidget(self.label_EUR_icon, 0, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        
         self.label_CHF_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_CHF_icon.setMaximumSize(QtCore.QSize(100, 100))
         self.label_CHF_icon.setText("")
-        self.label_CHF_icon.setPixmap(QtGui.QPixmap("./ICONS/CHF.png"))
+        self.label_CHF_icon.setPixmap(QtGui.QPixmap("src/UI/CHF.jpg"))
         self.label_CHF_icon.setScaledContents(True)
         self.label_CHF_icon.setObjectName("label_CHF_icon")
         self.gridLayout_3.addWidget(self.label_CHF_icon, 0, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        
         self.label_USD_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_USD_icon.setMaximumSize(QtCore.QSize(100, 100))
         self.label_USD_icon.setText("")
-        self.label_USD_icon.setPixmap(QtGui.QPixmap("./ICONS/USD.png"))
+        self.label_USD_icon.setPixmap(QtGui.QPixmap("src/UI/USD.jpg"))
         self.label_USD_icon.setScaledContents(True)
         self.label_USD_icon.setObjectName("label_USD_icon")
         self.gridLayout_3.addWidget(self.label_USD_icon, 0, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        
         self.label_GBP_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_GBP_icon.setMaximumSize(QtCore.QSize(100, 100))
         self.label_GBP_icon.setText("")
-        self.label_GBP_icon.setPixmap(QtGui.QPixmap("./ICONS/GBP.png"))
+        self.label_GBP_icon.setPixmap(QtGui.QPixmap("src/UI/GBP.jpg"))
         self.label_GBP_icon.setScaledContents(True)
         self.label_GBP_icon.setObjectName("label_GBP_icon")
         self.gridLayout_3.addWidget(self.label_GBP_icon, 0, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        
         self.label_logo = QtWidgets.QLabel(self.centralwidget)
         self.label_logo.setGeometry(QtCore.QRect(0, 0, 251, 141))
         self.label_logo.setText("")
-        self.label_logo.setPixmap(QtGui.QPixmap("./ICONS/LOGO.jpg"))
+        self.label_logo.setPixmap(QtGui.QPixmap("src/UI/LOGO.jpg"))
         self.label_logo.setScaledContents(True)
+        
         self.label_logo.setObjectName("label_logo")
         self.button_GoBack = QtWidgets.QPushButton(self.centralwidget)
         self.button_GoBack.setGeometry(QtCore.QRect(50, 700, 81, 41))
@@ -254,6 +261,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -267,7 +275,37 @@ class Ui_MainWindow(object):
         self.label_SM2.setText(_translate("MainWindow", "Session analysis"))
         self.label_SM.setText(_translate("MainWindow", "CS"))
         self.label_PickDates.setText(_translate("MainWindow", "Pick dates:"))
+        
+    def load_icons(self, base_path):
+        """Dynamically load icons for currency labels and the main logo."""
+        icon_paths = {
+            "GBP": "GBP.png",
+            "USD": "USD.png",
+            "CHF": "CHF.png",
+            "EUR": "EUR.png",
+        }
 
+        labels = {
+            "GBP": self.label_GBP_icon,
+            "USD": self.label_USD_icon,
+            "CHF": self.label_CHF_icon,
+            "EUR": self.label_EUR_icon,
+        }
+
+        # Load currency icons
+        for currency, file_name in icon_paths.items():
+            file_path = QtCore.QFileInfo(QtCore.QDir(base_path), file_name).absoluteFilePath()
+            if QtCore.QFile.exists(file_path):
+                labels[currency].setPixmap(QtGui.QPixmap(file_path))
+            else:
+                print(f"Warning: Icon for {currency} not found at {file_path}")
+
+        # Load the main logo
+        logo_path = QtCore.QFileInfo(QtCore.QDir(base_path), "LOGO.jpg").absoluteFilePath()
+        if QtCore.QFile.exists(logo_path):
+            self.label_logo.setPixmap(QtGui.QPixmap(logo_path))
+        else:
+            print(f"Warning: Logo not found at {logo_path}")
 
 if __name__ == "__main__":
     import sys
@@ -275,5 +313,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
+    icon_base_path = os.path.abspath("./ICONS")  # Adjust to the actual path of your icons folder
+    ui.load_icons(icon_base_path)
     MainWindow.show()
     sys.exit(app.exec_())

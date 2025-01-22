@@ -84,7 +84,6 @@ class Controller(QMainWindow):
         )
         ui.button_Analyze.clicked.connect(self.validate_and_analyze_cs)
         self.set_logo(ui.label_logo)
-        self.set_logo(ui.label_logo)
         return screen
 
     def setup_window_sm(self):

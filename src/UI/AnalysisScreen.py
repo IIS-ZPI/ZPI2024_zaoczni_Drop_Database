@@ -68,7 +68,7 @@ class Ui_MainWindow(object):
                 self.label_logo = QtWidgets.QLabel(self.centralwidget)
                 self.label_logo.setGeometry(QtCore.QRect(0, 0, 251, 141))
                 self.label_logo.setText("")
-                self.label_logo.setPixmap(QtGui.QPixmap("./ICONS/LOGO.jpg"))
+                self.label_logo.setPixmap(QtGui.QPixmap("src/UI/LOGO.jpg"))
                 self.label_logo.setScaledContents(True)
                 self.label_logo.setObjectName("label_logo")
                 self.button_GoBack = QtWidgets.QPushButton(self.centralwidget)
@@ -188,13 +188,20 @@ class Ui_MainWindow(object):
                 self.retranslateUi(MainWindow)
                 QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+                self.label_selected_data = QtWidgets.QLabel(self.frame)
+                self.label_selected_data.setGeometry(QtCore.QRect(50, 50, 450, 150))
+                self.label_selected_data.setAlignment(QtCore.Qt.AlignCenter)
+                self.label_selected_data.setWordWrap(True)
+                self.label_selected_data.setStyleSheet("font: 14pt 'Leelawadee UI';")
+                self.label_selected_data.setObjectName("label_selected_data")
+
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
                 MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
                 self.button_SafeToFile.setText(_translate("MainWindow", "Save data to file"))
                 self.button_GoBack.setText(_translate("MainWindow", "Go back"))
 
-
+        
 if __name__ == "__main__":
         import sys
         app = QtWidgets.QApplication(sys.argv)
