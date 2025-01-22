@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
                 font.setWeight(75)
                 self.button_CS.setFont(font)
                 self.button_CS.setAutoFillBackground(False)
-                self.button_CS.setStyleSheet("background-color: rgb(39, 180, 233);\nborder-radious:100px;")
+                self.button_CS.setStyleSheet("background-color: rgb(39, 180, 233);")
                 self.button_CS.setAutoDefault(False)
                 self.button_CS.setObjectName("button_CS")
                 self.button_DC = QtWidgets.QPushButton(self.frame)

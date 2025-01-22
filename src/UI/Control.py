@@ -2,6 +2,7 @@ import sys
 import os
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStackedWidget, QMessageBox, QCalendarWidget, QCheckBox, QRadioButton, QLabel
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import QDate
 from MainScreen import Ui_MainWindow as MainScreen
 from AnalysisSelection import Ui_MainWindow as AnalysisSelection
 from WindowCS import Ui_MainWindow as WindowCS
@@ -79,10 +80,14 @@ class Controller(QMainWindow):
         screen = QMainWindow()
         ui = WindowCS()
         ui.setupUi(screen)
+        earliest_date = QDate(2002, 1, 1)
+        ui.calendarFirst.setMinimumDate(earliest_date)
+        ui.calendarSecond.setMinimumDate(earliest_date)
         ui.button_GoBack.clicked.connect(
             lambda: self.stack.setCurrentWidget(self.main_screen)
         )
         ui.button_Analyze.clicked.connect(self.validate_and_analyze_cs)
+
         self.set_logo(ui.label_logo)
         return screen
 
@@ -90,6 +95,9 @@ class Controller(QMainWindow):
         screen = QMainWindow()
         ui = WindowSM()
         ui.setupUi(screen)
+        earliest_date = QDate(2002, 1, 1)
+        ui.calendarFirst.setMinimumDate(earliest_date)
+        ui.calendarSecond.setMinimumDate(earliest_date)
         ui.button_GoBack.clicked.connect(
             lambda: self.stack.setCurrentWidget(self.main_screen)
         )
@@ -101,6 +109,9 @@ class Controller(QMainWindow):
         screen = QMainWindow()
         ui = WindowDC()
         ui.setupUi(screen)
+        earliest_date = QDate(2002, 1, 1)
+        ui.calendarFirst.setMinimumDate(earliest_date)
+        ui.calendarSecond.setMinimumDate(earliest_date)
         ui.button_GoBack.clicked.connect(
             lambda: self.stack.setCurrentWidget(self.main_screen)
         )
@@ -137,11 +148,19 @@ class Controller(QMainWindow):
             QMessageBox.critical(self, "Error", "Calendar widgets not found.")
             return
 
-        start_date = calendar_first.selectedDate().toString("yyyy-MM-dd")
-        end_date = calendar_second.selectedDate().toString("yyyy-MM-dd")
+        start_date = calendar_first.selectedDate()
+        end_date = calendar_second.selectedDate()
+        
+        if start_date < QDate(2002, 1, 1) or end_date < QDate(2002, 1, 1):
+            QMessageBox.warning(self, "Input Error", "Dates cannot be earlier than 2002-01-01.")
+            return
 
+        if start_date >= end_date:
+            QMessageBox.warning(self, "Input Error", "The first date must be earlier than the second date.")
+            return
+        
         currency_buttons = {
-            "CHF": screen.findChild(QRadioButton, "radioButton_CHF"),
+            "NOK": screen.findChild(QRadioButton, "radioButton_CHF"),
             "USD": screen.findChild(QRadioButton, "radioButton_USD"),
             "EUR": screen.findChild(QRadioButton, "radioButton_EUR"),
             "GBP": screen.findChild(QRadioButton, "radioButton_GBP"),
@@ -151,7 +170,11 @@ class Controller(QMainWindow):
         if not start_date or not end_date or not selected_currency:
             QMessageBox.warning(self, "Input Error", "Not enough data selected.")
             return
-
+        
+        print("SM Analysis:")
+        print(f"Currency: {selected_currency}")
+        print(f"Start Date: {start_date.toString('yyyy-MM-dd')}")
+        print(f"End Date: {end_date.toString('yyyy-MM-dd')}")
         self.selected_dates['start'] = start_date
         self.selected_dates['end'] = end_date
         self.selected_currency = selected_currency
@@ -167,11 +190,19 @@ class Controller(QMainWindow):
             QMessageBox.critical(self, "Error", "Calendar widgets not found.")
             return
 
-        start_date = calendar_first.selectedDate().toString("yyyy-MM-dd")
-        end_date = calendar_second.selectedDate().toString("yyyy-MM-dd")
+        start_date = calendar_first.selectedDate()
+        end_date = calendar_second.selectedDate()
 
+        if start_date < QDate(2002, 1, 1) or end_date < QDate(2002, 1, 1):
+            QMessageBox.warning(self, "Input Error", "Dates cannot be earlier than 2002-01-01.")
+            return
+
+        if start_date >= end_date:
+            QMessageBox.warning(self, "Input Error", "The first date must be earlier than the second date.")
+            return
+        
         currency_buttons = {
-            "CHF": screen.findChild(QRadioButton, "radioButton_CHF"),
+            "NOK": screen.findChild(QRadioButton, "radioButton_CHF"),
             "USD": screen.findChild(QRadioButton, "radioButton_USD"),
             "EUR": screen.findChild(QRadioButton, "radioButton_EUR"),
             "GBP": screen.findChild(QRadioButton, "radioButton_GBP"),
@@ -181,7 +212,10 @@ class Controller(QMainWindow):
         if not start_date or not end_date or not selected_currency:
             QMessageBox.warning(self, "Input Error", "Not enough data selected.")
             return
-
+        print("CS Analysis:")
+        print(f"Currency: {selected_currency}")
+        print(f"Start Date: {start_date.toString('yyyy-MM-dd')}")
+        print(f"End Date: {end_date.toString('yyyy-MM-dd')}")
         self.selected_dates['start'] = start_date
         self.selected_dates['end'] = end_date
         self.selected_currency = selected_currency
@@ -197,11 +231,18 @@ class Controller(QMainWindow):
             QMessageBox.critical(self, "Error", "Calendar widgets not found.")
             return
 
-        start_date = calendar_first.selectedDate().toString("yyyy-MM-dd")
-        end_date = calendar_second.selectedDate().toString("yyyy-MM-dd")
+        start_date = calendar_first.selectedDate()
+        end_date = calendar_second.selectedDate()
+        
+        if start_date < QDate(2002, 1, 1) or end_date < QDate(2002, 1, 1):
+            QMessageBox.warning(self, "Input Error", "Dates cannot be earlier than 2002-01-01.")
+            return
 
+        if start_date >= end_date:
+            QMessageBox.warning(self, "Input Error", "The first date must be earlier than the second date.")
+            return
         currency_checkboxes = {
-            "CHF": screen.findChild(QCheckBox, "checkBox_CHF"),
+            "NOK": screen.findChild(QCheckBox, "checkBox_CHF"),
             "USD": screen.findChild(QCheckBox, "checkBox_USD"),
             "EUR": screen.findChild(QCheckBox, "checkBox_EUR"),
             "GBP": screen.findChild(QCheckBox, "checkBox_GBP"),
@@ -212,8 +253,13 @@ class Controller(QMainWindow):
             QMessageBox.warning(self, "Input Error", "Not enough data selected.")
             return
         if not start_date or not end_date or len(selected_currencies) > 2 :
-            QMessageBox.warning(self, "Input Error", "Too data selected.")
+            QMessageBox.warning(self, "Input Error", "Too  much data selected.")
             return
+        
+        print("DC Analysis:")
+        print(f"Currencies: {', '.join(selected_currencies)}")
+        print(f"Start Date: {start_date.toString('yyyy-MM-dd')}")
+        print(f"End Date: {end_date.toString('yyyy-MM-dd')}")
         self.selected_dates['start'] = start_date
         self.selected_dates['end'] = end_date
         self.selected_currencies = selected_currencies

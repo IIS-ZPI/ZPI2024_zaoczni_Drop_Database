@@ -194,6 +194,7 @@ class Ui_MainWindow(object):
                 self.label_selected_data.setWordWrap(True)
                 self.label_selected_data.setStyleSheet("font: 14pt 'Leelawadee UI';")
                 self.label_selected_data.setObjectName("label_selected_data")
+                
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
