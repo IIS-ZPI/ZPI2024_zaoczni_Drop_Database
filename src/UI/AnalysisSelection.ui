@@ -188,7 +188,7 @@ background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(39, 180, 233);
-border-radious:100px;</string>
+border-radius:100px;</string>
      </property>
      <property name="text">
       <string>CS</string>
