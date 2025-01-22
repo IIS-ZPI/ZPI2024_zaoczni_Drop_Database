@@ -124,7 +124,7 @@ class Ui_MainWindow(object):
                 self.label_CHF_icon = QtWidgets.QLabel(self.widget)
                 self.label_CHF_icon.setMaximumSize(QtCore.QSize(100, 100))
                 self.label_CHF_icon.setText("")
-                self.label_CHF_icon.setPixmap(QtGui.QPixmap("src/UI/CHF.jpg"))
+                self.label_CHF_icon.setPixmap(QtGui.QPixmap("src/UI/NOK.jpg"))
                 self.label_CHF_icon.setScaledContents(True)
                 self.label_CHF_icon.setObjectName("label_CHF_icon")
                 self.gridLayout_3.addWidget(self.label_CHF_icon, 0, 2, 1, 1, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
@@ -261,7 +261,7 @@ class Ui_MainWindow(object):
                 _translate = QtCore.QCoreApplication.translate
                 MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
                 self.button_Analyze.setText(_translate("MainWindow", "Analyze"))
-                self.radioButton_CHF.setText(_translate("MainWindow", "CHF"))
+                self.radioButton_CHF.setText(_translate("MainWindow", "NOK"))
                 self.radioButton_GBP.setText(_translate("MainWindow", "GBP"))
                 self.radioButton_USD.setText(_translate("MainWindow", "USD"))
                 self.radioButton_EUR.setText(_translate("MainWindow", "EUR"))
