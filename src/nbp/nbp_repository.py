@@ -1,7 +1,7 @@
 import typing as t
 from datetime import date, timedelta
 import requests
-from data_types import currency_code, exchange_rates
+from .data_types import currency_code, exchange_rates
 
 
 class nbp_repository(object):
@@ -146,7 +146,3 @@ class nbp_repository(object):
                             {"rate": rate["mid"], "currency": rate["code"]}
                         )
             return rates
-
-
-# Example usage
-# nbp_repository.get_exchange_rates(date(2024, 1, 1), date(2025, 1, 1), "USD")

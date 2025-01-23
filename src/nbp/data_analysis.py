@@ -1,6 +1,5 @@
-from nbp_repository import exchange_rates
-
-from data_types import *
+from .nbp_repository import exchange_rates
+from .data_types import *
 
 class data_analysis(object):
 
