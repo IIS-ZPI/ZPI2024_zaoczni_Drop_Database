@@ -1,7 +1,26 @@
 import typing as t
 from datetime import date, timedelta
 import requests
-from data_types import currency_code, exchange_rates
+from .data_types import currency_code, exchange_rates
+
+rate = t.TypedDict(
+    "rate",
+    {
+        "currency": str,
+        "code": currency_code,
+        "mid": float,
+    }
+)
+
+table_day = t.TypedDict(
+    "table_day",
+    {
+        "table": t.Literal["A"],
+        "no": str,
+        "effectiveDate": str,
+        "rates": list[rate],
+    }
+)
 
 
 class nbp_repository(object):
@@ -99,6 +118,9 @@ class nbp_repository(object):
             return "End date must be after start date"
         if base_currency is not None and base_currency == currency:
             return "Base currency must be different than currency"
+        
+        rates: exchange_rates
+
         # if time between dates is greated than 93 days, split dates into smaller 93 days ranges
         if (end_date - start_date).days > 93:
             rates = {}
@@ -125,11 +147,11 @@ class nbp_repository(object):
 
         # extract currencies data from response with dates
 
-        data = response.json()
+        data: list[table_day] = response.json()
         if base_currency is None:
             rates = {}
             for entry in data:
-                edate = entry["effectiveDate"]
+                edate = date.fromisoformat(entry["effectiveDate"])
                 for rate in entry["rates"]:
                     if rate["code"] == currency:
                         rates[edate] = rate["mid"]
@@ -137,16 +159,13 @@ class nbp_repository(object):
         else:
             rates = {}
             for entry in data:
-                edate = entry["effectiveDate"]
-                if edate not in rates:
-                    rates[edate] = []
+                edate = date.fromisoformat(entry["effectiveDate"])
+                value: float
+                base: float
                 for rate in entry["rates"]:
-                    if rate["code"] == currency or rate["code"] == base_currency:
-                        rates[edate].append(
-                            {"rate": rate["mid"], "currency": rate["code"]}
-                        )
+                    if rate["code"] == currency:
+                        value = rate["mid"]
+                    if rate["code"] == base_currency:
+                        base = rate["mid"]
+                rates[edate] = value / base
             return rates
-
-
-# Example usage
-# nbp_repository.get_exchange_rates(date(2024, 1, 1), date(2025, 1, 1), "USD")
