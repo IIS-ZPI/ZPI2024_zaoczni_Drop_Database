@@ -1,5 +1,4 @@
-from data_analysis import data_analysis
-from data_types import *
+from src.nbp import *
 import pytest
 
 def test_session_analysis():

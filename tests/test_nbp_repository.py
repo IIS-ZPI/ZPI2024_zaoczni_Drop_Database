@@ -1,6 +1,6 @@
 import pytest
 from datetime import date, timedelta
-from nbp_repository import nbp_repository
+from src.nbp import *
 
 
 def test_get_exchange_rates():
