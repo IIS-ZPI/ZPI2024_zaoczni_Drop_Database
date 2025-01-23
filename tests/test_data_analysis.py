@@ -1,6 +1,5 @@
-from data_analysis import data_analysis
-from data_types import *
-from datetime import date, timedelta
+from datetime import date
+from src.nbp import *
 import pytest
 
 
