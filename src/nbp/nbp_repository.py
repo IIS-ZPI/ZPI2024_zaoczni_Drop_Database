@@ -24,7 +24,7 @@ table_day = t.TypedDict(
 
 
 class nbp_repository(object):
-    one_day_api_url = "https://api.nbp.pl/api/exchangerates/tables/A/{startDate}/{endDate}/?format=json"
+    nbp_api_url = "https://api.nbp.pl/api/exchangerates/tables/A/{startDate}/{endDate}/?format=json"
 
     @t.overload
     @staticmethod
@@ -120,6 +120,11 @@ class nbp_repository(object):
             return "Base currency must be different than currency"
         
         rates: exchange_rates
+        
+        if currency not in ["USD", "EUR", "GBP", "NOK"] or (
+            base_currency is not None and base_currency not in ["USD", "EUR", "GBP", "NOK"]
+        ):
+            return "Currency not supported"
 
         # if time between dates is greated than 93 days, split dates into smaller 93 days ranges
         if (end_date - start_date).days > 93:
@@ -129,16 +134,22 @@ class nbp_repository(object):
                 next_date = current_date + timedelta(days=93)
                 if next_date > end_date:
                     next_date = end_date
-                rates.update(
-                    nbp_repository.get_exchange_rates(
-                        current_date, next_date, currency, base_currency
-                    )
+                more_rates = nbp_repository.get_exchange_rates(
+                    current_date, next_date, currency, base_currency
                 )
-                current_date = next_date
+                if isinstance(more_rates, str):
+                    return more_rates
+                else:
+                    rates.update(
+                        nbp_repository.get_exchange_rates(
+                            current_date, next_date, currency, base_currency
+                        )
+                    )
+                    current_date = next_date
             return rates
 
         response = requests.get(
-            nbp_repository.one_day_api_url.format(
+            nbp_repository.nbp_api_url.format(
                 startDate=start_date, endDate=end_date
             )
         )
