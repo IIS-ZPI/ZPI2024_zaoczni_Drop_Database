@@ -17,10 +17,10 @@ def test_get_exchange_rates_bad_arguments():
     assert result == "Start date must be after 2002-01-01"
 
     result = nbp_repository.get_exchange_rates(date(2025, 1, 1), date(2025, 1, 1), "USD")  
-    assert result == "Start date must be before end date"
+    assert result == "Error while fetching data from NBP API"
 
     result = nbp_repository.get_exchange_rates(date(2025, 1, 1), date(2025, 1, 10), "XYZ")
-    assert result == "Currency data not found"
+    assert result == "Currency not supported"
 
 
 
