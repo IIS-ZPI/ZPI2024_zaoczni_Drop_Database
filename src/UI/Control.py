@@ -131,7 +131,7 @@ class Controller(QMainWindow):
 
     def set_logo(self, label: QLabel):
         """Sets the logo image in a QLabel widget."""
-        logo_path = os.path.join(self.base_path, "LOGO.jpg")
+        logo_path = os.path.join(self.base_path, "./src/UI/LOGO.jpg")
         if os.path.exists(logo_path):
             label.setPixmap(QPixmap(logo_path))
             label.setScaledContents(True)
