@@ -44,6 +44,18 @@ class Ui_MainWindow(object):
         self.button_GoBack.setFont(font)
         self.button_GoBack.setStyleSheet("border-radius :20px; background-color: rgb(255, 255, 255);")
         self.button_GoBack.setObjectName("button_GoBack")
+        
+        # Save to file button
+        self.button_save = QtWidgets.QPushButton(self.centralwidget)
+        self.button_save.setGeometry(QtCore.QRect(225, 580, 100, 41))
+        font = QtGui.QFont()
+        font.setFamily("Leelawadee UI")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.button_save.setFont(font)
+        self.button_save.setStyleSheet("border-radius :20px; background-color: rgb(119, 196, 226);")
+        self.button_save.setObjectName("button_save")
 
         # Logo
         self.label_logo = QtWidgets.QLabel(self.centralwidget)
@@ -64,8 +76,9 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Analysis Results"))
         self.result_label.setText(_translate("MainWindow", "Results will be displayed here."))
-        self.image_label.setText(_translate("MainWindow", "Histogram will appear here."))
+        self.image_label.setText(_translate("MainWindow", "No histogram available for this kind of analysis."))
         self.button_GoBack.setText(_translate("MainWindow", "Go Back"))
+        self.button_save.setText(_translate("MainWindow", "Save to file"))
 
 
 if __name__ == "__main__":
