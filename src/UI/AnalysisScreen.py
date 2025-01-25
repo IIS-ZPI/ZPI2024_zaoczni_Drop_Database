@@ -1,115 +1,78 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
-        def setupUi(self, MainWindow):
-                MainWindow.setObjectName("MainWindow")
-                MainWindow.resize(1024, 768)
-                MainWindow.setStyleSheet("background-color:rgb(119, 196, 226)")
-                
-                self.centralwidget = QtWidgets.QWidget(MainWindow)
-                self.centralwidget.setObjectName("centralwidget")
-                
-                self.label_logo = QtWidgets.QLabel(self.centralwidget)
-                self.label_logo.setGeometry(QtCore.QRect(0, 0, 251, 141))
-                self.label_logo.setText("")
-                self.label_logo.setPixmap(QtGui.QPixmap("LOGO.jpg"))
-                self.label_logo.setScaledContents(True)
-                self.label_logo.setObjectName("label_logo")
-                
-                self.button_GoBack = QtWidgets.QPushButton(self.centralwidget)
-                self.button_GoBack.setGeometry(QtCore.QRect(50, 700, 81, 41))
-                font = QtGui.QFont()
-                font.setFamily("Leelawadee UI")
-                font.setPointSize(10)
-                font.setBold(True)
-                font.setWeight(75)
-                self.button_GoBack.setFont(font)
-                self.button_GoBack.setStyleSheet("border-radius :20px;\n"
-                                                                                 "background-color: rgb(255, 255, 255);\n")
-                self.button_GoBack.setObjectName("button_GoBack")
-                
-                self.frame_2 = QtWidgets.QFrame(self.centralwidget)
-                self.frame_2.setGeometry(QtCore.QRect(10, 150, 1001, 541))
-                palette = QtGui.QPalette()
-                brush = QtGui.QBrush(QtGui.QColor(24, 36, 56))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(24, 36, 56))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-                brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-                brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-                brush.setStyle(QtCore.Qt.SolidPattern)
-                palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-                self.frame_2.setPalette(palette)
-                self.frame_2.setAutoFillBackground(False)
-                self.frame_2.setStyleSheet("border-radius: 15px;\n"
-                                                                   "background-color: rgb(255, 255, 255);")
-                self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-                self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-                self.frame_2.setObjectName("frame_2")
-                
-                self.button_SafeToFile = QtWidgets.QPushButton(self.frame_2)
-                self.button_SafeToFile.setGeometry(QtCore.QRect(760, 480, 191, 30))
-                font = QtGui.QFont()
-                font.setFamily("Leelawadee UI")
-                font.setPointSize(12)
-                font.setBold(True)
-                font.setWeight(75)
-                self.button_SafeToFile.setFont(font)
-                self.button_SafeToFile.setStyleSheet("background-color: rgb(118, 196, 225);\n"
-                                                                                         "border-radius: 15px;")
-                self.button_SafeToFile.setObjectName("button_SafeToFile")
-                
-                self.frame_2.raise_()
-                self.label_logo.raise_()
-                self.button_GoBack.raise_()
-                MainWindow.setCentralWidget(self.centralwidget)
-                
-                self.statusbar = QtWidgets.QStatusBar(MainWindow)
-                self.statusbar.setObjectName("statusbar")
-                MainWindow.setStatusBar(self.statusbar)
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(1024, 768)
+        MainWindow.setStyleSheet("background-color:rgb(119, 196, 226)")
 
-                self.retranslateUi(MainWindow)
-                QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
 
-        def retranslateUi(self, MainWindow):
-                _translate = QtCore.QCoreApplication.translate
-                MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-                self.button_GoBack.setText(_translate("MainWindow", "Go back"))
-                self.button_SafeToFile.setText(_translate("MainWindow", "Save data to file"))
+        # Frame for results display
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setGeometry(QtCore.QRect(50, 150, 924, 500))
+        self.frame.setStyleSheet("border-radius: 15px; background-color: rgb(255, 255, 255);")
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+
+        # QLabel for displaying analysis text results
+        self.result_label = QtWidgets.QLabel(self.frame)
+        self.result_label.setGeometry(QtCore.QRect(20, 20, 400, 460))
+        self.result_label.setStyleSheet("font: 14pt 'Leelawadee UI';")
+        self.result_label.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
+        self.result_label.setWordWrap(True)
+        self.result_label.setObjectName("result_label")
+
+        # QLabel for displaying analysis images
+        self.image_label = QtWidgets.QLabel(self.frame)
+        self.image_label.setGeometry(QtCore.QRect(450, 20, 450, 450))
+        self.image_label.setStyleSheet("border: 1px solid gray;")
+        self.image_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.image_label.setObjectName("image_label")
+
+        # Back button
+        self.button_GoBack = QtWidgets.QPushButton(self.centralwidget)
+        self.button_GoBack.setGeometry(QtCore.QRect(50, 700, 81, 41))
+        font = QtGui.QFont()
+        font.setFamily("Leelawadee UI")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.button_GoBack.setFont(font)
+        self.button_GoBack.setStyleSheet("border-radius :20px; background-color: rgb(255, 255, 255);")
+        self.button_GoBack.setObjectName("button_GoBack")
+
+        # Logo
+        self.label_logo = QtWidgets.QLabel(self.centralwidget)
+        self.label_logo.setGeometry(QtCore.QRect(0, 0, 251, 141))
+        self.label_logo.setPixmap(QtGui.QPixmap("LOGO.jpg"))
+        self.label_logo.setScaledContents(True)
+        self.label_logo.setObjectName("label_logo")
+
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "Analysis Results"))
+        self.result_label.setText(_translate("MainWindow", "Results will be displayed here."))
+        self.image_label.setText(_translate("MainWindow", "Histogram will appear here."))
+        self.button_GoBack.setText(_translate("MainWindow", "Go Back"))
+
 
 if __name__ == "__main__":
-        import sys
-        app = QtWidgets.QApplication(sys.argv)
-        MainWindow = QtWidgets.QMainWindow()
-        ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
-        MainWindow.show()
-        sys.exit(app.exec_())
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
