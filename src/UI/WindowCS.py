@@ -72,17 +72,17 @@ class Ui_MainWindow(object):
         self.gridLayout_3 = QtWidgets.QGridLayout(self.layoutWidget)
         self.gridLayout_3.setContentsMargins(10, 10, 10, 10)
         self.gridLayout_3.setObjectName("gridLayout_3")
-        self.radioButton_CHF = QtWidgets.QRadioButton(self.layoutWidget)
-        self.radioButton_CHF.setEnabled(True)
+        self.radioButton_NOK = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButton_NOK.setEnabled(True)
         font = QtGui.QFont()
         font.setFamily("Leelawadee UI")
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
-        self.radioButton_CHF.setFont(font)
-        self.radioButton_CHF.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.radioButton_CHF.setObjectName("radioButton_CHF")
-        self.gridLayout_3.addWidget(self.radioButton_CHF, 1, 2, 1, 1, QtCore.Qt.AlignHCenter)
+        self.radioButton_NOK.setFont(font)
+        self.radioButton_NOK.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.radioButton_NOK.setObjectName("radioButton_NOK")
+        self.gridLayout_3.addWidget(self.radioButton_NOK, 1, 2, 1, 1, QtCore.Qt.AlignHCenter)
         self.radioButton_GBP = QtWidgets.QRadioButton(self.layoutWidget)
         font = QtGui.QFont()
         font.setFamily("Leelawadee UI")
@@ -117,23 +117,23 @@ class Ui_MainWindow(object):
         self.label_EUR_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_EUR_icon.setMaximumSize(QtCore.QSize(100, 100))
         self.label_EUR_icon.setText("")
-        self.label_EUR_icon.setPixmap(QtGui.QPixmap("EUR.jpg"))
+        self.label_EUR_icon.setPixmap(QtGui.QPixmap("src/UI/EUR.jpg"))
         self.label_EUR_icon.setScaledContents(True)
         self.label_EUR_icon.setObjectName("label_EUR_icon")
         self.gridLayout_3.addWidget(self.label_EUR_icon, 0, 3, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         
-        self.label_CHF_icon = QtWidgets.QLabel(self.layoutWidget)
-        self.label_CHF_icon.setMaximumSize(QtCore.QSize(100, 100))
-        self.label_CHF_icon.setText("")
-        self.label_CHF_icon.setPixmap(QtGui.QPixmap("NOK.jpg"))
-        self.label_CHF_icon.setScaledContents(True)
-        self.label_CHF_icon.setObjectName("label_CHF_icon")
-        self.gridLayout_3.addWidget(self.label_CHF_icon, 0, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.label_NOK_icon = QtWidgets.QLabel(self.layoutWidget)
+        self.label_NOK_icon.setMaximumSize(QtCore.QSize(100, 100))
+        self.label_NOK_icon.setText("")
+        self.label_NOK_icon.setPixmap(QtGui.QPixmap("src/UI/NOK.jpg"))
+        self.label_NOK_icon.setScaledContents(True)
+        self.label_NOK_icon.setObjectName("label_NOK_icon")
+        self.gridLayout_3.addWidget(self.label_NOK_icon, 0, 2, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         
         self.label_USD_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_USD_icon.setMaximumSize(QtCore.QSize(100, 100))
         self.label_USD_icon.setText("")
-        self.label_USD_icon.setPixmap(QtGui.QPixmap("USD.jpg"))
+        self.label_USD_icon.setPixmap(QtGui.QPixmap("src/UI/USD.jpg"))
         self.label_USD_icon.setScaledContents(True)
         self.label_USD_icon.setObjectName("label_USD_icon")
         self.gridLayout_3.addWidget(self.label_USD_icon, 0, 1, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
@@ -141,7 +141,7 @@ class Ui_MainWindow(object):
         self.label_GBP_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_GBP_icon.setMaximumSize(QtCore.QSize(100, 100))
         self.label_GBP_icon.setText("")
-        self.label_GBP_icon.setPixmap(QtGui.QPixmap("GBP.jpg"))
+        self.label_GBP_icon.setPixmap(QtGui.QPixmap("src/UI/GBP.jpg"))
         self.label_GBP_icon.setScaledContents(True)
         self.label_GBP_icon.setObjectName("label_GBP_icon")
         self.gridLayout_3.addWidget(self.label_GBP_icon, 0, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
@@ -149,7 +149,7 @@ class Ui_MainWindow(object):
         self.label_logo = QtWidgets.QLabel(self.centralwidget)
         self.label_logo.setGeometry(QtCore.QRect(0, 0, 251, 141))
         self.label_logo.setText("")
-        self.label_logo.setPixmap(QtGui.QPixmap("LOGO.jpg"))
+        self.label_logo.setPixmap(QtGui.QPixmap("src/UI/LOGO.jpg"))
         self.label_logo.setScaledContents(True)
         
         self.label_logo.setObjectName("label_logo")
@@ -267,7 +267,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.button_Analyze.setText(_translate("MainWindow", "Analyze"))
-        self.radioButton_CHF.setText(_translate("MainWindow", "NOK"))
+        self.radioButton_NOK.setText(_translate("MainWindow", "NOK"))
         self.radioButton_GBP.setText(_translate("MainWindow", "GBP"))
         self.radioButton_USD.setText(_translate("MainWindow", "USD"))
         self.radioButton_EUR.setText(_translate("MainWindow", "EUR"))
@@ -281,14 +281,14 @@ class Ui_MainWindow(object):
         icon_paths = {
             "GBP": "GBP.png",
             "USD": "USD.png",
-            "CHF": "NOK.png",
+            "NOK": "NOK.png",
             "EUR": "EUR.png",
         }
 
         labels = {
             "GBP": self.label_GBP_icon,
             "USD": self.label_USD_icon,
-            "CHF": self.label_CHF_icon,
+            "NOK": self.label_NOK_icon,
             "EUR": self.label_EUR_icon,
         }
 
