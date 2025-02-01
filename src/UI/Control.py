@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from datetime import datetime
+import numpy as np
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QStackedWidget, QMessageBox, QLabel, QPushButton, QInputDialog, QFileDialog
 )
@@ -56,6 +57,7 @@ class Controller(QMainWindow):
         self.selected_currency = None
         self.analysis_type = None
         
+        
     def toggle_currency_selection(self, state, currency):
         """Add or remove currency from the selected_currency list based on checkbox state."""
         if self.selected_currency is None:
@@ -97,6 +99,10 @@ class Controller(QMainWindow):
         if self.selected_dates['start']< QDate(2002, 1, 1) or self.selected_dates['end'] < QDate(2002, 1, 1):
             QMessageBox.warning(self, "Input Error", "Dates cannot be earlier than 2002-01-01.")
             return
+        if self.selected_dates['end'] == QDate(datetime.today().date()):
+            QMessageBox.warning(self, "Input Error", "End date can not be today.")
+            return
+        
         if self.analysis_type == 'DC':
             if not isinstance(self.selected_currency, list) or len(self.selected_currency) != 2:
                 QMessageBox.warning(self, "Input Error", "Please select exactly two currencies for Distribution of Change analysis." + str(self.selected_currency))
@@ -113,30 +119,26 @@ class Controller(QMainWindow):
         """Delegate analysis processing based on the selected type."""
         start_date = self.selected_dates['start'].toPyDate()
         end_date = self.selected_dates['end'].toPyDate()
-        currencies = self.selected_currency
 
-        exchange_rates = nbp_repository.get_exchange_rates(start_date, end_date, currencies)
-        if isinstance(exchange_rates, str):
-            raise ValueError(f"Failed to fetch exchange rates: {exchange_rates}")
-
-        if self.analysis_type == 'CS':
-            result = data_analysis.session_analysis(exchange_rates)
-            self.display_cs_result(result)
-        elif self.analysis_type == 'SM':
-            result = data_analysis.statistical_analysis(exchange_rates)
-            self.display_sm_result(result)
-        elif self.analysis_type == 'DC':
-            # Ensure exactly two currencies are selected
-            if len(currencies) != 2:
+        if self.analysis_type == 'DC':
+            
+            if not isinstance(self.selected_currency, list) or len(self.selected_currency) != 2:
                 raise ValueError("Exactly two currencies must be selected for DC analysis.")
 
-            currency_1, currency_2 = currencies
+            currency_1, currency_2 = self.selected_currency
+            exchange_rates = {}
 
-        # Ensure data exists for both currencies
+            for currency in [currency_1, currency_2]:
+                rate_data = nbp_repository.get_exchange_rates(start_date, end_date, currency)
+                if isinstance(rate_data, str):
+                    raise ValueError(f"Failed to fetch exchange rates for {currency}: {rate_data}")
+                exchange_rates[currency] = rate_data
+
+            
             if currency_1 not in exchange_rates or currency_2 not in exchange_rates:
-                raise ValueError(f"Missing exchange rate data for selected currencies: {currencies}")
+                raise ValueError(f"Missing exchange rate data for selected currencies: {self.selected_currency}")
 
-        # Compute the relative exchange rate changes
+           
             relative_exchange_rates = {
                 date: exchange_rates[currency_1][date] / exchange_rates[currency_2][date]
                 for date in exchange_rates[currency_1]
@@ -145,6 +147,29 @@ class Controller(QMainWindow):
 
             img_path, histogram = data_analysis.distribution_of_change(relative_exchange_rates)
             self.display_dc_result(img_path, histogram)
+
+        else:
+            
+            if not isinstance(self.selected_currency, str):
+                raise ValueError("A single currency must be selected for CS and SM analysis.")
+
+            currency = self.selected_currency
+            exchange_rates = nbp_repository.get_exchange_rates(start_date, end_date, currency)
+
+            if isinstance(exchange_rates, str):
+                raise ValueError(f"Failed to fetch exchange rates for {currency}: {exchange_rates}")
+
+          
+            if self.analysis_type == 'CS':
+                result = data_analysis.session_analysis(exchange_rates)
+                self.display_cs_result(result)
+
+           
+            elif self.analysis_type == 'SM':
+                result = data_analysis.statistical_analysis(exchange_rates)
+                self.display_sm_result(result)
+
+
 
 
     def update_selected_date(self, calendar, date_type):
@@ -171,10 +196,18 @@ class Controller(QMainWindow):
 
     def display_sm_result(self, result):
         """Display Statistical Measures results on the AnalysisScreen."""
+        dominant_value = result.dominant
+        if hasattr(dominant_value, "mode"):  
+            dominant_value = dominant_value.mode
+        if isinstance(dominant_value, (list, tuple, np.ndarray)): 
+            dominant_value = dominant_value[0]
+        elif isinstance(dominant_value, (list, tuple, np.ndarray)):
+            dominant_value = dominant_value[0]
+                
         screen = self.analysis_screen.findChild(QLabel, "result_label")
         screen.setText(
             f"Median: {result.median}\n"
-            f"Dominant: {result.dominant}\n"
+            f"Dominant: {dominant_value}\n"
             f"Standard Deviation: {result.standard_deviation}\n"
             f"Coefficient of Variation: {result.coefficient_of_variation}"
         )
@@ -182,82 +215,109 @@ class Controller(QMainWindow):
     def display_dc_result(self, img_path, histogram):
         """Display Distribution of Change results on the AnalysisScreen."""
         if self.analysis_type != 'DC':
-            # Clear the image label and return if not DC analysis
+           
             img_label = self.analysis_screen.findChild(QLabel, "image_label")
             img_label.clear()
             hist_label = self.analysis_screen.findChild(QLabel, "result_label")
             hist_label.setText("No data available for this analysis type.")
             return
 
-        # Display the image if the analysis type is DC
+       
         img_label = self.analysis_screen.findChild(QLabel, "image_label")
         img_label.setPixmap(QPixmap(img_path))
 
-        # Display histogram data
+      
         hist_label = self.analysis_screen.findChild(QLabel, "result_label")
+        hist_label.setStyleSheet("font: 9pt 'Leelawadee UI';")
+        
         hist_text = "\n".join([f"{k}: {v}" for k, v in histogram.items()])
         hist_label.setText(hist_text)
 
 
 
     def save_analysis_data(self):
-        """Save the current analysis data to a file, prompting if the file exists."""
-        # Default file path
-        default_file_path = os.path.join(os.path.dirname(__file__), "data.txt")
+        """Save the current analysis data to a file and, if DC analysis, save the histogram."""
+       
+        base_path = os.path.dirname(__file__)
+        text_file_path = os.path.join(base_path, "data.txt")
+        histogram_path = os.path.join(base_path, "histogram.jpg")
 
-        # Check if the default file exists
-        if os.path.exists(default_file_path):
-            # Create a custom message box with labeled buttons
+       
+        if os.path.exists(text_file_path):
             message_box = QMessageBox(self)
             message_box.setWindowTitle("File Exists")
             message_box.setText("The file 'data.txt' already exists. What would you like to do?")
             override_button = message_box.addButton("Override File", QMessageBox.AcceptRole)
             new_file_button = message_box.addButton("Create New File", QMessageBox.RejectRole)
-
-            # Show the dialog and wait for user response
             message_box.exec()
 
             if message_box.clickedButton() == override_button:
-                # Overwrite the existing file
-                file_path = default_file_path
+                file_path = text_file_path
             elif message_box.clickedButton() == new_file_button:
-                # Ask for a new filename
-                new_file_name, ok = QInputDialog.getText(
-                    self,
-                    "New File Name",
-                    "Enter a new filename (with .txt extension):",
-                )
+                new_file_name, ok = QInputDialog.getText(self, "New File Name", "Enter a new filename (with .txt extension):")
                 if not ok or not new_file_name:
                     QMessageBox.warning(self, "Save Cancelled", "No file was saved.")
                     return
-
-                file_path = os.path.join(os.path.dirname(__file__), new_file_name)
+                file_path = os.path.join(base_path, new_file_name)
             else:
-                # If no valid option is chosen, cancel the operation
                 QMessageBox.warning(self, "Save Cancelled", "No file was saved.")
                 return
         else:
-            # If the file does not exist, proceed with the default file
-            file_path = default_file_path
+            file_path = text_file_path
 
-        # Retrieve analysis results
+       
         result_label = self.analysis_screen.findChild(QLabel, "result_label")
         analysis_data = result_label.text()
 
         try:
-            # Save analysis data to the chosen file path
+           
             with open(file_path, "w", encoding="utf-8") as file:
                 file.write(analysis_data)
 
-            # Display success message
-            QMessageBox.information(
-            self, "File Created", f"File '{os.path.basename(file_path)}' successfully created"
-            )
+            QMessageBox.information(self, "File Created", f"File '{os.path.basename(file_path)}' successfully created.")
+
+            
+            if self.analysis_type == "DC":
+                self.save_histogram(histogram_path)
+
         except Exception as e:
-            # Display error message in case of failure
-            QMessageBox.critical(
-            self, "Save Error", f"An error occurred while saving the file: {str(e)}"
-        )
+            QMessageBox.critical(self, "Save Error", f"An error occurred while saving the file: {str(e)}")
+
+
+    def save_histogram(self, default_path):
+        """Save histogram image with user confirmation."""
+        if os.path.exists(default_path):
+            message_box = QMessageBox(self)
+            message_box.setWindowTitle("File Exists")
+            message_box.setText("The file 'histogram.jpg' already exists. What would you like to do?")
+            override_button = message_box.addButton("Override File", QMessageBox.AcceptRole)
+            new_file_button = message_box.addButton("Create New File", QMessageBox.RejectRole)
+            message_box.exec()
+
+            if message_box.clickedButton() == override_button:
+                file_path = default_path
+            elif message_box.clickedButton() == new_file_button:
+                new_file_name, ok = QInputDialog.getText(self, "New File Name", "Enter a new filename (with .jpg extension):")
+                if not ok or not new_file_name:
+                    QMessageBox.warning(self, "Save Cancelled", "Histogram was not saved.")
+                    return
+                file_path = os.path.join(os.path.dirname(default_path), new_file_name)
+            else:
+                QMessageBox.warning(self, "Save Cancelled", "Histogram was not saved.")
+                return
+        else:
+            file_path = default_path
+
+        try:
+            img_label = self.analysis_screen.findChild(QLabel, "image_label")
+            pixmap = img_label.pixmap()
+            if pixmap:
+                pixmap.save(file_path, "JPG")
+                QMessageBox.information(self, "File Created", f"Histogram saved as '{os.path.basename(file_path)}'.")
+            else:
+                QMessageBox.warning(self, "Save Error", "No histogram available to save.")
+        except Exception as e:
+            QMessageBox.critical(self, "Save Error", f"An error occurred while saving the histogram: {str(e)}")
 
             
     # Screen navigation methods
@@ -293,7 +353,7 @@ class Controller(QMainWindow):
         ui.radioButton_EUR.toggled.connect(lambda: self.update_selected_currency('EUR'))
         ui.radioButton_USD.toggled.connect(lambda: self.update_selected_currency('USD'))
         ui.radioButton_GBP.toggled.connect(lambda: self.update_selected_currency('GBP'))
-        ui.radioButton_CHF.toggled.connect(lambda: self.update_selected_currency('NOK'))
+        ui.radioButton_NOK.toggled.connect(lambda: self.update_selected_currency('NOK'))
 
         # Connect calendar signals
         ui.calendarFirst.clicked.connect(lambda: self.update_selected_date(ui.calendarFirst, 'start'))
@@ -312,7 +372,7 @@ class Controller(QMainWindow):
         ui.radioButton_EUR.toggled.connect(lambda: self.update_selected_currency('EUR'))
         ui.radioButton_USD.toggled.connect(lambda: self.update_selected_currency('USD'))
         ui.radioButton_GBP.toggled.connect(lambda: self.update_selected_currency('GBP'))
-        ui.radioButton_CHF.toggled.connect(lambda: self.update_selected_currency('NOK'))
+        ui.radioButton_NOK.toggled.connect(lambda: self.update_selected_currency('NOK'))
 
         # Connect calendar signals
         ui.calendarFirst.clicked.connect(lambda: self.update_selected_date(ui.calendarFirst, 'start'))
@@ -331,7 +391,7 @@ class Controller(QMainWindow):
         ui.checkBox_EUR.toggled.connect(lambda state: self.toggle_currency_selection(state, 'EUR'))
         ui.checkBox_USD.toggled.connect(lambda state: self.toggle_currency_selection(state, 'USD'))
         ui.checkBox_GBP.toggled.connect(lambda state: self.toggle_currency_selection(state, 'GBP'))
-        ui.checkBox_CHF.toggled.connect(lambda state: self.toggle_currency_selection(state, 'NOK'))
+        ui.checkBox_NOK.toggled.connect(lambda state: self.toggle_currency_selection(state, 'NOK'))
 
         # Connect calendar signals
         ui.calendarFirst.clicked.connect(lambda: self.update_selected_date(ui.calendarFirst, 'start'))
