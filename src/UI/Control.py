@@ -246,10 +246,10 @@ class Controller(QMainWindow):
                 
         screen = self.analysis_screen.findChild(QLabel, "result_label")
         screen.setText(
-            f"Median: {result.median}\n"
-            f"Dominant: {dominant_value}\n"
-            f"Standard Deviation: {result.standard_deviation}\n"
-            f"Coefficient of Variation: {result.coefficient_of_variation}"
+            f"Median: {round(result.median,3)}\n"
+            f"Dominant: {round(dominant_value,3)}\n"
+            f"Standard Deviation: {round(result.standard_deviation,3)}\n"
+            f"Coefficient of Variation: {round(result.coefficient_of_variation,3)}"
         )
 
     def display_dc_result(self, img_path, histogram):
@@ -270,7 +270,7 @@ class Controller(QMainWindow):
         hist_label = self.analysis_screen.findChild(QLabel, "result_label")
         hist_label.setStyleSheet("font: 9pt 'Leelawadee UI';")
         
-        hist_text = "\n".join([f"{k}: {v}" for k, v in histogram.items()])
+        hist_text = "\n"
         hist_label.setText(hist_text)
 
 
