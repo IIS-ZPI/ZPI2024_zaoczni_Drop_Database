@@ -133,9 +133,9 @@ class data_analysis(object):
         # Very primitive pixel => inch conversion
         plt.figure(figsize=(img_size_px[0] / 100, img_size_px[1] / 100))
         counts, bins, _ = plt.hist(changes, bins=bar_count)
-        plt.xlabel("Zmiana względem sesji poprzedniej")
-        plt.ylabel("Liczba sesji")
-        plt.title("Rozkład zmian sesji")
+        plt.xlabel("Change relative to previous session")
+        plt.ylabel("Number of sessions")
+        plt.title("Distribution of session changes")
 
         current_datetime = datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
         filename = f"hist_{current_datetime}.png"
