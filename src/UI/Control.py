@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QStackedWidget, QMessageBox, QLabel, QPushButton, QInputDialog, QFileDialog
 )
 from PyQt5.QtCore import QDate
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 from nbp.data_analysis import data_analysis
 from nbp.nbp_repository import nbp_repository
@@ -52,10 +53,49 @@ class Controller(QMainWindow):
         
         self.show()
     def reset_data(self):
+        
+            # Uncheck all check boxes in WindowDC
+        if hasattr(self, 'window_dc'):
+            self.window_dc.findChild(QtWidgets.QCheckBox, "checkBox_USD").setChecked(False)
+            self.window_dc.findChild(QtWidgets.QCheckBox, "checkBox_NOK").setChecked(False)
+            self.window_dc.findChild(QtWidgets.QCheckBox, "checkBox_EUR").setChecked(False)
+            self.window_dc.findChild(QtWidgets.QCheckBox, "checkBox_GBP").setChecked(False)
+            
+            # Uncheck all radio buttons in WindowCS
+        if hasattr(self, 'window_cs'):
+            radio_buttons = [
+            self.window_cs.findChild(QtWidgets.QRadioButton, "radioButton_USD"),
+            self.window_cs.findChild(QtWidgets.QRadioButton, "radioButton_NOK"),
+            self.window_cs.findChild(QtWidgets.QRadioButton, "radioButton_EUR"),
+            self.window_cs.findChild(QtWidgets.QRadioButton, "radioButton_GBP"),
+            ]
+            for radio_button in radio_buttons:
+                if radio_button:
+                    radio_button.setAutoExclusive(False)  # Temporarily disable auto-exclusive behavior
+                    radio_button.setChecked(False)
+                    radio_button.setAutoExclusive(True)   # Re-enable auto-exclusive behavior
+
+            # Uncheck all radio buttons in WindowSM
+        if hasattr(self, 'window_sm'):
+            radio_buttons = [
+            self.window_sm.findChild(QtWidgets.QRadioButton, "radioButton_USD"),
+            self.window_sm.findChild(QtWidgets.QRadioButton, "radioButton_NOK"),
+            self.window_sm.findChild(QtWidgets.QRadioButton, "radioButton_EUR"),
+            self.window_sm.findChild(QtWidgets.QRadioButton, "radioButton_GBP"),
+            ]
+            for radio_button in radio_buttons:
+                if radio_button:
+                    radio_button.setAutoExclusive(False)  # Temporarily disable auto-exclusive behavior
+                    radio_button.setChecked(False)
+                    radio_button.setAutoExclusive(True)   # Re-enable auto-exclusive behavior
+            
         """Reset selected data to default values."""
         self.selected_dates = {'start': None, 'end': datetime.today().date()}
         self.selected_currency = None
         self.analysis_type = None
+        self.analysis_screen.findChild(QtWidgets.QLabel, "image_label").setText(
+        "No histogram available for this kind of analysis.")    
+                    
         
         
     def toggle_currency_selection(self, state, currency):
