@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['src\\UI\\Control.py'],
+    ['src/UI/Control.py'],
     pathex=[],
     binaries=[],
     datas=[('src/UI', 'UI'), ('src/nbp', 'nbp'),('src/UI/images','images')],
