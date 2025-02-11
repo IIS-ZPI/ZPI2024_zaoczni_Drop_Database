@@ -21,7 +21,7 @@ jobs:
       - name: Run PyInstaller
         run: |
           python -m PyInstaller Control.spec
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Windows_control
           path: dist/Control.exe
