@@ -5,7 +5,7 @@ a = Analysis(
     ['src\\UI\\Control.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/UI', 'UI'), ('src/nbp', 'nbp')],
+    datas=[('src/UI', 'UI'), ('src/nbp', 'nbp'),('src/UI/images','images')],
     hiddenimports=['UI.MainScreen', 'nbp.data_analysis', 'nbp.data_types', 'nbp.nbp_repository','scipy','scipy.stats','requests','matplotlib'],
     hookspath=[],
     hooksconfig={},
