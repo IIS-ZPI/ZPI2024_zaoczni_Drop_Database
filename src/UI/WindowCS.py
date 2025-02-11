@@ -1,5 +1,10 @@
-import os
+import os,sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("./src/UI/"), relative_path)
 
 
 class Ui_MainWindow(object):
@@ -108,25 +113,25 @@ class Ui_MainWindow(object):
     def _setup_icons(self):
         self.label_EUR_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_EUR_icon.setMaximumSize(QtCore.QSize(100, 100))
-        self.label_EUR_icon.setPixmap(QtGui.QPixmap("src/UI/EUR.jpg"))
+        self.label_EUR_icon.setPixmap(QtGui.QPixmap(resource_path("./images/EUR.jpg")))
         self.label_EUR_icon.setScaledContents(True)
         self.label_EUR_icon.setObjectName("label_EUR_icon")
         self.gridLayout_3.addWidget(self.label_EUR_icon, 0, 3, 1, 1, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.label_NOK_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_NOK_icon.setMaximumSize(QtCore.QSize(100, 100))
-        self.label_NOK_icon.setPixmap(QtGui.QPixmap("src/UI/NOK.jpg"))
+        self.label_NOK_icon.setPixmap(QtGui.QPixmap(resource_path("./images/NOK.jpg")))
         self.label_NOK_icon.setScaledContents(True)
         self.label_NOK_icon.setObjectName("label_NOK_icon")
         self.gridLayout_3.addWidget(self.label_NOK_icon, 0, 2, 1, 1, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.label_USD_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_USD_icon.setMaximumSize(QtCore.QSize(100, 100))
-        self.label_USD_icon.setPixmap(QtGui.QPixmap("src/UI/USD.jpg"))
+        self.label_USD_icon.setPixmap(QtGui.QPixmap(resource_path("./images/USD.jpg")))
         self.label_USD_icon.setScaledContents(True)
         self.label_USD_icon.setObjectName("label_USD_icon")
         self.gridLayout_3.addWidget(self.label_USD_icon, 0, 1, 1, 1, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.label_GBP_icon = QtWidgets.QLabel(self.layoutWidget)
         self.label_GBP_icon.setMaximumSize(QtCore.QSize(100, 100))
-        self.label_GBP_icon.setPixmap(QtGui.QPixmap("src/UI/GBP.jpg"))
+        self.label_GBP_icon.setPixmap(QtGui.QPixmap(resource_path("./images/GBP.jpg")))
         self.label_GBP_icon.setScaledContents(True)
         self.label_GBP_icon.setObjectName("label_GBP_icon")
         self.gridLayout_3.addWidget(self.label_GBP_icon, 0, 0, 1, 1, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
@@ -134,7 +139,7 @@ class Ui_MainWindow(object):
     def _setup_labels(self):
         self.label_logo = QtWidgets.QLabel(self.centralwidget)
         self.label_logo.setGeometry(QtCore.QRect(0, 0, 251, 141))
-        self.label_logo.setPixmap(QtGui.QPixmap("src/UI/LOGO.jpg"))
+        self.label_logo.setPixmap(QtGui.QPixmap(resource_path("./images/LOGO.jpg")))
         self.label_logo.setScaledContents(True)
         self.label_logo.setObjectName("label_logo")
         self.label_SM2 = QtWidgets.QLabel(self.centralwidget)

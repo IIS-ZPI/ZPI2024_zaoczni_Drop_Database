@@ -11,12 +11,18 @@ from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 from nbp.data_analysis import data_analysis
 from nbp.nbp_repository import nbp_repository
-from MainScreen import Ui_MainWindow as MainScreen
-from AnalysisSelection import Ui_MainWindow as AnalysisSelection
-from WindowCS import Ui_MainWindow as WindowCS
-from WindowSM import Ui_MainWindow as WindowSM
-from WindowDC import Ui_MainWindow as WindowDC
-from AnalysisScreen import Ui_MainWindow as AnalysisScreen
+from UI.MainScreen import Ui_MainWindow as MainScreen
+from UI.AnalysisSelection import Ui_MainWindow as AnalysisSelection
+from UI.WindowCS import Ui_MainWindow as WindowCS
+from UI.WindowSM import Ui_MainWindow as WindowSM
+from UI.WindowDC import Ui_MainWindow as WindowDC
+from UI.AnalysisScreen import Ui_MainWindow as AnalysisScreen
+
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("./src/UI/"), relative_path)
 
 
 class Controller(QMainWindow):
@@ -451,7 +457,7 @@ class Controller(QMainWindow):
 
     def set_logo(self, label: QLabel):
         """Sets the logo image in a QLabel widget."""
-        logo_path = os.path.join(os.path.dirname(__file__), "LOGO.jpg")
+        logo_path = resource_path("./images/LOGO.jpg")
         if os.path.exists(logo_path):
             label.setPixmap(QPixmap(logo_path))
             label.setScaledContents(True)
