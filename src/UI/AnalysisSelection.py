@@ -1,4 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import os,sys
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("./src/UI/"), relative_path)
 
 class Ui_MainWindow(object):
         def setupUi(self, MainWindow):
@@ -57,7 +63,7 @@ class Ui_MainWindow(object):
                 
                 self.label_logo = QtWidgets.QLabel(self.centralwidget)
                 self.label_logo.setGeometry(QtCore.QRect(0, 0, 271, 161))
-                self.label_logo.setPixmap(QtGui.QPixmap("LOGO.jpg"))
+                self.label_logo.setPixmap(QtGui.QPixmap(resource_path("./images/LOGO.jpg")))
                 self.label_logo.setScaledContents(True)
                 self.label_logo.setObjectName("label_logo")
                 
