@@ -38,8 +38,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 2.3.0
-          release_name: ${{ github.event.head_commit.message }}
+          tag_name: ${{ github.ref }}
+          release_name: Release: ${{ github.ref }}
           body: |
             Test Release v1.0.0
           draft: false
