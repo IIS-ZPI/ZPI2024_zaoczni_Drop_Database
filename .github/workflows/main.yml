@@ -31,14 +31,17 @@ jobs:
         with:
           name: Windows_control
           path: dist/Control.exe
-
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
       - name: create release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.extract_branch.outputs.branch }}
           release_name: Release ${{ github.ref }}
           body: |
             Test Release v1.0.0
