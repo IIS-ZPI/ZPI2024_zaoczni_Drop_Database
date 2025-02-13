@@ -43,8 +43,6 @@ jobs:
         with:
           tag_name: ${{ steps.extract_branch.outputs.branch }}
           release_name: Release ${{ github.event.head_commit.message }}
-          body: |
-            Test Release v1.0.0
           draft: false
           prerelease: false
       - name: Upload Release Asset
