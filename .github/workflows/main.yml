@@ -1,0 +1,57 @@
+name: Build Workflow
+
+on:
+  push:
+#    branches: master
+
+jobs:
+  build-windows:
+    runs-on: windows-2019
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.9'
+          architecture: 'x64'
+      - name: Installl setuptools
+        run: |
+          pip install setuptools
+      - name: Installl pyinstaller
+        run: |
+          pip install pyinstaller
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+      - name: Run PyInstaller
+        run: |
+          python -m PyInstaller Control.spec
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Windows_control
+          path: dist/Control.exe
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.head_commit.message }}
+          release_name: Release ${{ steps.extract_branch.outputs.branch }} ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: dist/Control.exe
+          asset_name: DROP-DATABASE-NBP.exe
+          asset_content_type: application/zip

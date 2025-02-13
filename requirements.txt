@@ -4,3 +4,4 @@ requests==2.32.0
 pytest==8.3.4
 scipy==1.13.1
 pyQT5==5.15.9
+
